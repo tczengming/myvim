@@ -35,6 +35,7 @@ Bundle 'QFixToggle'
 Bundle 'Color-Sampler-Pack'
 Bundle 'txt.vim'
 Bundle 'mru.vim'
+Bundle 'YankRing.vim'
 Bundle 'Align'
 Bundle 'DoxygenToolkit.vim'
 Bundle 'headerGatesAdd.vim'
@@ -90,7 +91,7 @@ set lazyredraw "do not redraw while executing macros (much faster)
 set nf=
 " In Visual Block Mode, cursor can be positioned where there is no actual character
 set ve=block
-set ignorecase " Set search/replace pattern to ignore case 
+"set ignorecase " Set search/replace pattern to ignore case 
 set smartcase " Set smartcase mode on, If there is upper case character in the search patern, the 'ignorecase' option will be override.
 set showcmd     " display incomplete commands
 set incsearch       " do incremental searching
