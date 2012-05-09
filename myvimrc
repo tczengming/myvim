@@ -105,7 +105,7 @@ let NERDTreeChDirMode=2
 
 let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
 let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
-let g:DoxygenToolkit_authorName="tczengming@163.com" 
+let g:DoxygenToolkit_authorName="tczengming@jyxtec.com" 
 let g:DoxygenToolkit_versionString="0.1.00"
 let g:DoxygenToolkit_briefTag_funcName="yes"
 autocmd BufNewFile *.{h,hpp,c,cpp} DoxAuthor 
@@ -138,7 +138,8 @@ noremap! <M-l> <Right>
 set pastetoggle=<F2>
 "nnoremap <F2> :set invnumber number?<CR>:set invpaste paste?<CR>
 "imap <F2> <C-O>:set invpaste paste?<CR><C-O>:set invnumber number?<CR>
-nnoremap <silent> <F3> :Rgrep<CR>
+nnoremap <silent> <F3> :Grep<CR>
+nnoremap <silent> <F4> :Rgrep<CR>
 nnoremap <F6> :AutoPreviewToggle<CR>
 inoremap <F6> <ESC>:AutoPreviewToggle<CR>i 
 " Open and close all the three plugins on the same time 
@@ -151,6 +152,13 @@ nmap <F10>  :TrinityToggleTagList<CR>
 nmap <F11>  :TrinityToggleNERDTree<CR>
 
 " --lookupfile--
+"  script to generate filenametags
+"  #!/bin/sh
+"  # generate tag file for lookupfile plugin, use absolute path
+"  echo -e "!_TAG_FILE_SORTED\t2\t/2=foldcase/" > filenametags
+"  find `pwd` -not -regex '.*\.\(png\|gif\)' -type f -printf "%f\t%p\t1\n" | \
+"      sort -f >> filenametags 
+"      
 let g:LookupFile_MinPatLength = 2               "最少输入2个字符才开始查找 
 let g:LookupFile_PreserveLastPattern = 0        "不保存上次查找的字符串 
 "let g:LookupFile_PreservePatternHistory = 1     "保存查找历史 
