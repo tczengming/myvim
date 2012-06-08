@@ -1,9 +1,10 @@
 " ~/.vimrc (configuration file for vim only)
 
+" Encoding related
 set fileencodings=utf-8,gb2312,gbk,gb18030
 set termencoding=utf-8
 
-"vundle begin 插件管理
+"vundle begin
 filetype off                   " required!
 
 set rtp+=~/.vim/bundle/vundle/
@@ -65,40 +66,48 @@ set autoread           " 文件被其他程序修改时自动载入
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
+" Tab related
 set shiftwidth=4
 set tabstop=4
 set softtabstop=4
 set expandtab
-set list                     " 显示Tab符，使用一高亮竖线代替
-set listchars=tab:\|\ ,
+                        
+set list
+set listchars=tab:\|\ ,   " 显示Tab符，使用一高亮竖线代替
 
+" Indent related
 " http://vimcdoc.sourceforge.net/doc/indent.html
 " g0 类的public顶格写
 " :0 将 case 标号放在 switch() 缩进位置之后的 N 个字符处
 " N-s namespace 下顶格
 " (0  条件语句多个条件在不同行时下一行与上一行对齐
 set cinoptions=g0,:0,N-s,(0
-set autoindent
+set autoindent      " always set autoindenting on
 set smartindent
-"set mouse=a
 
-set mps+=<:>            "让<>可以使用%跳转
-set hid " allow to change buffer without saving 
-set shortmess=atI " shortens messages to avoid 'press a key' prompt 
-set lazyredraw "do not redraw while executing macros (much faster)
+set mps+=<:>        " 让<>可以使用%跳转
+set hid             " allow to change buffer without saving 
+set shortmess=atI   " shortens messages to avoid 'press a key' prompt 
+set lazyredraw      " do not redraw while executing macros (much faster)
 " Set Number format to null(default is octal) , when press CTRL-A on number
 " like 007, it would not become 010
 set nf=
 " In Visual Block Mode, cursor can be positioned where there is no actual character
 set ve=block
 "set ignorecase " Set search/replace pattern to ignore case 
-set smartcase " Set smartcase mode on, If there is upper case character in the search patern, the 'ignorecase' option will be override.
+set smartcase   " Set smartcase mode on, If there is upper case character in the search patern, the 'ignorecase' option will be override.
 set showcmd     " display incomplete commands
-set incsearch       " do incremental searching
-set hlsearch  "highlight search
-set magic   " Enable magic matching
-set showmatch " show matching paren
-set wildmenu "增强模式中的命令行自动完成操作
+set incsearch   " do incremental searching
+set hlsearch    " highlight search
+set magic       " Enable magic matching
+set showmatch   " show matching paren
+set wildmenu    " 增强模式中的命令行自动完成操作
+"set mouse=a    " Enable mouse usage (all modes) in terminals
+
+" showmarks setting
+let showmarks_enable = 0 " disable showmarks when vim startup
+let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+let showmarks_ignore_type = "hqm" " help, Quickfix, non-modifiable
 
 " Auto change the root directory
 let NERDTreeChDirMode=2
@@ -138,6 +147,7 @@ noremap! <M-l> <Right>
 set pastetoggle=<F2>
 "nnoremap <F2> :set invnumber number?<CR>:set invpaste paste?<CR>
 "imap <F2> <C-O>:set invpaste paste?<CR><C-O>:set invnumber number?<CR>
+"/<C-R><C-W> : 把单个<cword>单词放入搜索或者命令行
 nnoremap <silent> <F3> :Grep<CR>
 nnoremap <silent> <F4> :Rgrep<CR>
 nnoremap <F6> :AutoPreviewToggle<CR>
