@@ -15,7 +15,7 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 " vim-scripts repos
 Bundle 'STL-improved'
-Bundle 'taglist.vim'
+"Bundle 'taglist.vim'
 Bundle 'tag_in_new_tab'
 Bundle 'autoload_cscope.vim'
 Bundle 'CmdlineComplete'
@@ -29,8 +29,8 @@ Bundle 'grep.vim'
 Bundle 'a.vim'
 Bundle 'The-NERD-Commenter'
 Bundle 'The-NERD-tree'
-Bundle 'Source-Explorer-srcexpl.vim'
-Bundle 'trinity.vim'
+"Bundle 'Source-Explorer-srcexpl.vim'
+"Bundle 'trinity.vim'
 "under linux need exec 'dos2unix ~/.vim/bundle/QFixToggle/plugin/qfixtoggle.vim'
 Bundle 'QFixToggle'
 Bundle 'Color-Sampler-Pack'
@@ -44,6 +44,7 @@ Bundle 'ShowMarks'
 " non github repos
 " autocomplete.match.pair.vim,这个安装完必须在.vim/bundle/449512/目录下创建plugin目录并在其下创建软链接指向autocomplete.match.pair.vim,否则不工作,另外不知为何(号不会自动完成配对
 Bundle 'git://gist.github.com/449512.git'
+Bundle 'git://github.com/majutsushi/tagbar'
 " ...
 filetype plugin indent on     " required! 
 "vundle end
@@ -56,12 +57,6 @@ set statusline=%F%m%r%h%w\ %{&ff}\ %Y\ [ascii:%b\ hex:0x\%02.2B]\ [%{(&fenc\ ==\
 set number
 set autochdir          " 自动切换当前目录为当前文件所在的目录
 set autoread           " 文件被其他程序修改时自动载入
-
-" Lines folding
-"set foldenable
-"set foldnestmax=1
-"set foldmethod=syntax
-"set foldlevel=1
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -109,19 +104,21 @@ let showmarks_enable = 0 " disable showmarks when vim startup
 let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 let showmarks_ignore_type = "hqm" " help, Quickfix, non-modifiable
 
+" NERDTree options
 " Auto change the root directory
 let NERDTreeChDirMode=2
+let g:NERDTreeWinSize = 23
+
+" Tagbar options
+let g:tagbar_width = 30
 
 let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
 let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
-let g:DoxygenToolkit_authorName="tczengming@jyxtec.com" 
+let g:DoxygenToolkit_authorName="zengming@jyxtec.com" 
 let g:DoxygenToolkit_versionString="0.1.00"
 let g:DoxygenToolkit_briefTag_funcName="yes"
 autocmd BufNewFile *.{h,hpp,c,cpp} DoxAuthor 
 
-" <Space> key at normal model.  
-"nnoremap <Space> i <Esc>l
-  
 " Switching between buffers. 
 nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>j
@@ -145,21 +142,19 @@ noremap! <M-h> <left>
 noremap! <M-l> <Right>
 
 set pastetoggle=<F2>
-"nnoremap <F2> :set invnumber number?<CR>:set invpaste paste?<CR>
-"imap <F2> <C-O>:set invpaste paste?<CR><C-O>:set invnumber number?<CR>
 "/<C-R><C-W> : 把单个<cword>单词放入搜索或者命令行
 nnoremap <silent> <F3> :Grep<CR>
 nnoremap <silent> <F4> :Rgrep<CR>
 nnoremap <F6> :AutoPreviewToggle<CR>
 inoremap <F6> <ESC>:AutoPreviewToggle<CR>i 
 " Open and close all the three plugins on the same time 
-nmap <F8>   :TrinityToggleAll<CR>
+"nmap <F8>   :TrinityToggleAll<CR>
 " Open and close the srcexpl.vim separately 
-nmap <F7>   :TrinityToggleSourceExplorer<CR>
+"nmap <F7>   :TrinityToggleSourceExplorer<CR>
 " Open and close the taglist.vim separately 
-nmap <F10>  :TrinityToggleTagList<CR>
+"nmap <F10>  :TrinityToggleTagList<CR>
 " Open and close the NERD_tree.vim separately 
-nmap <F11>  :TrinityToggleNERDTree<CR>
+"nmap <F11>  :TrinityToggleNERDTree<CR>
 
 " --lookupfile--
 "  script to generate filenametags
@@ -188,9 +183,9 @@ let g:autocscope_menus=0
 set cscopequickfix=s-,g-,d-,c-,t-,e-,f-,i-
 
 "'csto' 被设为 0，cscope 数据库先 被搜索，搜索失败的情况下在搜索标签文件 
- "设定了 'cscopetag'，这样所有的 :tag 命令就会实际上调用 :cstag。这包括 :tag、Ctrl-] 及 vim -t。
- "结果是一般的 tag 命令不仅搜索由 ctags 产生的标签文 件，同时也搜索 cscope 数据库,但是好像有bug,二者共存时有的无法搜索
- if has("cscope") 
+"设定了 'cscopetag'，这样所有的 :tag 命令就会实际上调用 :cstag。这包括 :tag、Ctrl-] 及 vim -t。
+"结果是一般的 tag 命令不仅搜索由 ctags 产生的标签文 件，同时也搜索 cscope 数据库,但是好像有bug,二者共存时有的无法搜索
+if has("cscope") 
     set csprg=/usr/bin/cscope
     " Use both cscope and ctag
     set cscopetag
@@ -198,26 +193,26 @@ set cscopequickfix=s-,g-,d-,c-,t-,e-,f-,i-
     set cscopeverbose
     " Use cscope for definition search first
     set cscopetagorder=0
- endif
+endif
 
- nmap <C-_>s :cs find s <C-R>=expand("<cword>")<CR><CR>
- nmap <C-_>g :cs find g <C-R>=expand("<cword>")<CR><CR>
- nmap <C-_>c :cs find c <C-R>=expand("<cword>")<CR><CR>
- nmap <C-_>t :cs find t <C-R>=expand("<cword>")<CR><CR>
- nmap <C-_>e :cs find e <C-R>=expand("<cword>")<CR><CR>
- nmap <C-_>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
- nmap <C-_>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
- nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+nmap <C-_>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-_>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-_>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-_>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-_>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-_>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-_>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
- " 解决cscope与tag共存时ctrl+]有时不正常的bug
- nmap <C-]> :tj <C-R>=expand("<cword>")<CR><CR>
+" 解决cscope与tag共存时ctrl+]有时不正常的bug
+nmap <C-]> :tj <C-R>=expand("<cword>")<CR><CR>
 
 " VimTip 329: A map for swapping words 
- " http://vim.sourceforge.net/tip_view.php?tip_id= 
- " Then when you put the cursor on or in a word, press "\sw", and 
- " the word will be swapped with the next word.  The words may 
- " even be separated by punctuation (such as "abc = def"). 
- nnoremap <unique> <silent><leader>sw "_yiw:s/\(\%#\w\+\)\(\W\+\)\(\w\+\)/\3\2\1/<cr><c-o>
+" http://vim.sourceforge.net/tip_view.php?tip_id= 
+" Then when you put the cursor on or in a word, press "\sw", and 
+" the word will be swapped with the next word.  The words may 
+" even be separated by punctuation (such as "abc = def"). 
+nnoremap <unique> <silent><leader>sw "_yiw:s/\(\%#\w\+\)\(\W\+\)\(\w\+\)/\3\2\1/<cr><c-o>
 
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
@@ -321,3 +316,38 @@ function! RemovePairs()
 endfunction
 " 用退格键删除一个左括号时同时删除对应的右括号
 inoremap <BS> <ESC>:call RemovePairs()<CR>a
+
+function! ToggleNERDTreeAndTagbar()
+    let w:jumpbacktohere = 1
+
+    " Detect which plugins are open
+    if exists('t:NERDTreeBufName')
+        let nerdtree_open = bufwinnr(t:NERDTreeBufName) != -1
+    else
+        let nerdtree_open = 0
+    endif
+    let tagbar_open = bufwinnr('__Tagbar__') != -1
+
+    " Perform the appropriate action
+    if nerdtree_open && tagbar_open
+        NERDTreeClose
+        TagbarClose
+    elseif nerdtree_open
+        TagbarOpen
+    elseif tagbar_open
+        NERDTree
+    else
+        NERDTree
+        TagbarOpen
+    endif
+
+    " Jump back to the original window
+    for window in range(1, winnr('$'))
+        execute window . 'wincmd w'
+        if exists('w:jumpbacktohere')
+            unlet w:jumpbacktohere
+            break
+        endif
+    endfor
+endfunction
+nmap <F8> :call ToggleNERDTreeAndTagbar()<CR>
