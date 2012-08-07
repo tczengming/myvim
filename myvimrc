@@ -1,4 +1,4 @@
-" ~/.vimrc (configuration file for vim only)
+"~/.vimrc (configuration file for vim only)
 
 " Encoding related
 set fileencodings=utf-8,gb2312,gbk,gb18030
@@ -15,51 +15,65 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 " vim-scripts repos
 Bundle 'STL-improved'
-"Bundle 'taglist.vim'
+Bundle 'majutsushi/tagbar'
 Bundle 'tag_in_new_tab'
 Bundle 'autoload_cscope.vim'
 Bundle 'CmdlineComplete'
 Bundle 'xptemplate'
 Bundle 'neocomplcache'
+Bundle 'Rip-Rip/clang_complete'
+Bundle 'osyo-manga/neocomplcache-clang_complete'
 Bundle 'genutils'
 Bundle 'lookupfile'
+Bundle 'kien/ctrlp.vim'
+Bundle 'wincent/Command-T'
 Bundle 'autopreview'
 Bundle 'echofunc.vim'
 Bundle 'grep.vim'
 Bundle 'a.vim'
 Bundle 'The-NERD-Commenter'
 Bundle 'The-NERD-tree'
-"Bundle 'Source-Explorer-srcexpl.vim'
-"Bundle 'trinity.vim'
 "under linux need exec 'dos2unix ~/.vim/bundle/QFixToggle/plugin/qfixtoggle.vim'
 Bundle 'QFixToggle'
 Bundle 'Color-Sampler-Pack'
+Bundle 'altercation/vim-colors-solarized'
 Bundle 'txt.vim'
 Bundle 'mru.vim'
 Bundle 'YankRing.vim'
-Bundle 'Align'
+Bundle 'tpope/vim-surround.git'
 Bundle 'DoxygenToolkit.vim'
 Bundle 'headerGatesAdd.vim'
 Bundle 'ShowMarks'
+Bundle 'Lokaltog/vim-powerline'
 " non github repos
 " autocomplete.match.pair.vim,这个安装完必须在.vim/bundle/449512/目录下创建plugin目录并在其下创建软链接指向autocomplete.match.pair.vim,否则不工作,另外不知为何(号不会自动完成配对
 Bundle 'git://gist.github.com/449512.git'
-Bundle 'git://github.com/majutsushi/tagbar'
 " ...
 filetype plugin indent on     " required! 
 "vundle end
 
-colorscheme desert 
-syn on "显高亮
-"set ruler  "屏幕右下角显示当前光标所处位置
-set laststatus=2 " always have status-line'
-set statusline=%F%m%r%h%w\ %{&ff}\ %Y\ [ascii:%b\ hex:0x\%02.2B]\ [%{(&fenc\ ==\ \"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %=%l/%L,%v\ %p%%
+hi Normal ctermbg=NONE  "开启背景透明
+set t_Co=256 " Explicitly tell vim that the terminal supports 256 colors
+"colorscheme peaksea
+let g:solarized_termcolors=256
+colorscheme solarized
+set background=dark
+
+syntax on "显高亮
 set number
 set autochdir          " 自动切换当前目录为当前文件所在的目录
 set autoread           " 文件被其他程序修改时自动载入
 
+" vim-powerline
+set laststatus=2 " always have status-line'
+let g:Powerline_symbols = 'fancy'
+"set statusline=%F%m%r%h%w\ %{&ff}\ %Y\ [ascii:%b\ hex:0x\%02.2B]\ [%{(&fenc\ ==\ \"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %=%l/%L,%v\ %p%%
+
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
+
+" 光标到达行尾或者行首时，特定键继续移动转至下一行或上一行
+set whichwrap+=b,s,<,>,[,]
 
 " Tab related
 set shiftwidth=4
@@ -147,14 +161,6 @@ nnoremap <silent> <F3> :Grep<CR>
 nnoremap <silent> <F4> :Rgrep<CR>
 nnoremap <F6> :AutoPreviewToggle<CR>
 inoremap <F6> <ESC>:AutoPreviewToggle<CR>i 
-" Open and close all the three plugins on the same time 
-"nmap <F8>   :TrinityToggleAll<CR>
-" Open and close the srcexpl.vim separately 
-"nmap <F7>   :TrinityToggleSourceExplorer<CR>
-" Open and close the taglist.vim separately 
-"nmap <F10>  :TrinityToggleTagList<CR>
-" Open and close the NERD_tree.vim separately 
-"nmap <F11>  :TrinityToggleNERDTree<CR>
 
 " --lookupfile--
 "  script to generate filenametags
@@ -173,9 +179,10 @@ if filereadable("./filenametags")                "设置tag文件的名字
 let g:LookupFile_TagExpr ='"./filenametags"'
 endif
 
-" -- taglist --
+"ctrlp
+let g:ctrlp_user_command = 'find %s -type f'
+
 set tags=tags;
-let Tlist_Auto_Update=1
 
 " -- cscope --
 let g:autocscope_menus=0
@@ -253,6 +260,12 @@ inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><C-y>  neocomplcache#close_popup()
 inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
+" use neocomplcache & clang_complete
+" neocomplcache option
+let g:neocomplcache_force_overwrite_completefunc=1
+" clang_complete option
+let g:clang_complete_auto=1
+
 "Fast remove highlight search
 nmap <silent> <leader><cr> :noh<cr>
 
@@ -284,38 +297,6 @@ function! AutoUpdateTheLastUpdateInfo()
 endfunction
 autocmd BufWritePost *.{h,hpp,c,cpp} call AutoUpdateTheLastUpdateInfo()
 autocmd BufNewFile *.{h,hpp,c,cpp} exec 'call append(0, "\/\/ Last Update:" . strftime("%Y-%m-%d %H:%M:%S", localtime()))'
-
-" 按退格键时判断当前光标前一个字符，如果是左括号，则删除对应的右括号以及括号中间的内容
-function! RemovePairs()
-    let l:line = getline(".")
-    let l:previous_char = l:line[col(".")-1] " 取得当前光标前一个字符
- 
-    if index(["(", "[", "{"], l:previous_char) != -1
-        let l:original_pos = getpos(".")
-        execute "normal %"
-        let l:new_pos = getpos(".")
- 
-        " 如果没有匹配的右括号
-        if l:original_pos == l:new_pos
-            execute "normal! a\<BS>"
-            return
-        end
- 
-        let l:line2 = getline(".")
-        if len(l:line2) == col(".")
-            " 如果右括号是当前行最后一个字符
-            execute "normal! v%xa"
-        else
-            " 如果右括号不是当前行最后一个字符
-            execute "normal! v%xi"
-        end
- 
-    else
-        execute "normal! a\<BS>"
-    end
-endfunction
-" 用退格键删除一个左括号时同时删除对应的右括号
-inoremap <BS> <ESC>:call RemovePairs()<CR>a
 
 function! ToggleNERDTreeAndTagbar()
     let w:jumpbacktohere = 1
