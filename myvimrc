@@ -21,8 +21,8 @@ Bundle 'autoload_cscope.vim'
 Bundle 'CmdlineComplete'
 Bundle 'xptemplate'
 Bundle 'neocomplcache'
-Bundle 'Rip-Rip/clang_complete'
-Bundle 'osyo-manga/neocomplcache-clang_complete'
+"Bundle 'Rip-Rip/clang_complete'
+"Bundle 'osyo-manga/neocomplcache-clang_complete'
 Bundle 'genutils'
 Bundle 'lookupfile'
 Bundle 'kien/ctrlp.vim'
@@ -63,6 +63,7 @@ syntax on "显高亮
 set number
 set autochdir          " 自动切换当前目录为当前文件所在的目录
 set autoread           " 文件被其他程序修改时自动载入
+set backupdir=~/.vimbak,/tmp
 
 " vim-powerline
 set laststatus=2 " always have status-line'
@@ -262,9 +263,9 @@ inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
 " use neocomplcache & clang_complete
 " neocomplcache option
-let g:neocomplcache_force_overwrite_completefunc=1
+"let g:neocomplcache_force_overwrite_completefunc=1
 " clang_complete option
-let g:clang_complete_auto=1
+"let g:clang_complete_auto=1
 
 "Fast remove highlight search
 nmap <silent> <leader><cr> :noh<cr>
