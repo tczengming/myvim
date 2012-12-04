@@ -4,37 +4,58 @@
 set fileencodings=utf-8,gb2312,gbk,gb18030
 set termencoding=utf-8
 
-"vundle begin
-filetype off                   " required!
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vundle begin
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+filetype off                " required!
 
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 " let Vundle manage Vundle
-" required! 
 Bundle 'gmarik/vundle'
+
 " vim-scripts repos
+
+"  Improved C++ STL syntax highlighting
 Bundle 'STL-improved'
+
+" Displays tags in a window, ordered by class etc, i used it instead of taglist
 Bundle 'majutsushi/tagbar'
-Bundle 'tag_in_new_tab'
+
 Bundle 'autoload_cscope.vim'
 Bundle 'CmdlineComplete'
 Bundle 'xptemplate'
+
+"  Ultimate auto completion system for Vim
 Bundle 'neocomplcache'
+
 "Bundle 'Rip-Rip/clang_complete'
 "Bundle 'osyo-manga/neocomplcache-clang_complete'
+
 Bundle 'genutils'
 Bundle 'lookupfile'
+
+" Fuzzy file, buffer, mru, tag, ... finder with regexp support.
 Bundle 'kien/ctrlp.vim'
+
+" Fast file navigation
 Bundle 'wincent/Command-T'
+
+" Preview the definition of variables or functions in a preview window
 Bundle 'autopreview'
+
+" Echo the function declaration in the command line for C/C++
 Bundle 'echofunc.vim'
+
 Bundle 'grep.vim'
 Bundle 'a.vim'
 Bundle 'The-NERD-Commenter'
 Bundle 'The-NERD-tree'
-"under linux need exec 'dos2unix ~/.vim/bundle/QFixToggle/plugin/qfixtoggle.vim'
+
+" Under linux need exec 'dos2unix ~/.vim/bundle/QFixToggle/plugin/qfixtoggle.vim'
 Bundle 'QFixToggle'
+
 Bundle 'Color-Sampler-Pack'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'txt.vim'
@@ -45,28 +66,38 @@ Bundle 'DoxygenToolkit.vim'
 Bundle 'headerGatesAdd.vim'
 Bundle 'ShowMarks'
 Bundle 'Lokaltog/vim-powerline'
-" non github repos
-" autocomplete.match.pair.vim,这个安装完必须在.vim/bundle/449512/目录下创建plugin目录并在其下创建软链接指向autocomplete.match.pair.vim,否则不工作,另外不知为何(号不会自动完成配对
-Bundle 'git://gist.github.com/449512.git'
-" ...
-filetype plugin indent on     " required! 
-"vundle end
 
-hi Normal ctermbg=NONE  "开启背景透明
-set t_Co=256 " Explicitly tell vim that the terminal supports 256 colors
-"colorscheme peaksea
+" Deal with pairs of punctuations such as (), [], {}, and so on
+Bundle 'kana/vim-smartinput'
+
+" non github repos
+" ...
+filetype plugin indent on   " required! 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vundle end
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" solarized theme
+set t_Co=256                " Explicitly tell vim that the terminal supports 256 colors, need before setting the colorscheme
 let g:solarized_termcolors=256
 colorscheme solarized
 set background=dark
 
-syntax on "显高亮
+" Enable syntax highlighting
+syntax on
+
 set number
-set autochdir          " 自动切换当前目录为当前文件所在的目录
-set autoread           " 文件被其他程序修改时自动载入
-set backupdir=~/.vimbak,/tmp
+set autochdir               " 自动切换当前目录为当前文件所在的目录
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" 下面两行改变备份文件存放路径
+set backupdir=~/.vim/backup
+set directory=~/.vim/backup
 
 " vim-powerline
-set laststatus=2 " always have status-line'
+set laststatus=2            " always have status-line'
 let g:Powerline_symbols = 'fancy'
 "set statusline=%F%m%r%h%w\ %{&ff}\ %Y\ [ascii:%b\ hex:0x\%02.2B]\ [%{(&fenc\ ==\ \"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %=%l/%L,%v\ %p%%
 
@@ -80,10 +111,10 @@ set whichwrap+=b,s,<,>,[,]
 set shiftwidth=4
 set tabstop=4
 set softtabstop=4
-set expandtab
+set expandtab               " Use spaces instead of tabs
                         
 set list
-set listchars=tab:\|\ ,   " 显示Tab符，使用一高亮竖线代替
+set listchars=tab:\|\ ,     " 显示Tab符，使用一高亮竖线代替
 
 " Indent related
 " http://vimcdoc.sourceforge.net/doc/indent.html
@@ -92,6 +123,7 @@ set listchars=tab:\|\ ,   " 显示Tab符，使用一高亮竖线代替
 " N-s namespace 下顶格
 " (0  条件语句多个条件在不同行时下一行与上一行对齐
 set cinoptions=g0,:0,N-s,(0
+
 set autoindent      " always set autoindenting on
 set smartindent
 
@@ -99,12 +131,15 @@ set mps+=<:>        " 让<>可以使用%跳转
 set hid             " allow to change buffer without saving 
 set shortmess=atI   " shortens messages to avoid 'press a key' prompt 
 set lazyredraw      " do not redraw while executing macros (much faster)
+
 " Set Number format to null(default is octal) , when press CTRL-A on number
 " like 007, it would not become 010
 set nf=
+
 " In Visual Block Mode, cursor can be positioned where there is no actual character
 set ve=block
-"set ignorecase " Set search/replace pattern to ignore case 
+
+set ignorecase  " Set search/replace pattern to ignore case 
 set smartcase   " Set smartcase mode on, If there is upper case character in the search patern, the 'ignorecase' option will be override.
 set showcmd     " display incomplete commands
 set incsearch   " do incremental searching
@@ -115,9 +150,9 @@ set wildmenu    " 增强模式中的命令行自动完成操作
 "set mouse=a    " Enable mouse usage (all modes) in terminals
 
 " showmarks setting
-let showmarks_enable = 0 " disable showmarks when vim startup
+let showmarks_enable = 0            " disable showmarks when vim startup
 let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-let showmarks_ignore_type = "hqm" " help, Quickfix, non-modifiable
+let showmarks_ignore_type = "hqm"   " help, Quickfix, non-modifiable
 
 " NERDTree options
 " Auto change the root directory
@@ -156,8 +191,12 @@ noremap! <M-k> <Up>
 noremap! <M-h> <left>
 noremap! <M-l> <Right>
 
-set pastetoggle=<F2>
 "/<C-R><C-W> : 把单个<cword>单词放入搜索或者命令行
+
+" open ctags entries in a new tab
+nnoremap <silent><Leader><C-]> <C-w><C-]><C-w>T
+
+set pastetoggle=<F2>
 nnoremap <silent> <F3> :Grep<CR>
 nnoremap <silent> <F4> :Rgrep<CR>
 nnoremap <F6> :AutoPreviewToggle<CR>
@@ -272,6 +311,7 @@ nmap <silent> <leader><cr> :noh<cr>
 
 " 每行超过80个的字符用下划线标示
 au BufRead,BufNewFile *.asm,*.c,*.cpp,*.java,*.cs,*.sh,*.lua,*.pl,*.pm,*.py,*.rb,*.hs,*.vim 2match Underlined /.\%81v/
+
 " 超过80个的字符高亮
 "au BufWinEnter * let w:m1=matchadd('Search', '\%<88v.\%>81v', -1)
 "au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
@@ -332,4 +372,5 @@ function! ToggleNERDTreeAndTagbar()
         endif
     endfor
 endfunction
+
 nmap <F8> :call ToggleNERDTreeAndTagbar()<CR>
