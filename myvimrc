@@ -23,7 +23,9 @@ Bundle 'STL-improved'
 " Displays tags in a window, ordered by class etc, i used it instead of taglist
 Bundle 'majutsushi/tagbar'
 
-Bundle 'autoload_cscope.vim'
+" recommend fetch it from https://github.com/tczengming/autoload_cscope.vim.git which support c and cpp
+Bundle 'tczengming/autoload_cscope.vim'
+
 Bundle 'CmdlineComplete'
 Bundle 'xptemplate'
 
