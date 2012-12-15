@@ -65,7 +65,7 @@ Bundle 'mru.vim'
 Bundle 'YankRing.vim'
 Bundle 'tpope/vim-surround.git'
 Bundle 'DoxygenToolkit.vim'
-Bundle 'headerGatesAdd.vim'
+Bundle 'tczengming/headerGatesAdd.vim'
 Bundle 'ShowMarks'
 Bundle 'Lokaltog/vim-powerline'
 
