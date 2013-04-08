@@ -202,7 +202,7 @@ set pastetoggle=<F2>
 nnoremap <silent> <F3> :Grep<CR>
 nnoremap <silent> <F4> :Rgrep<CR>
 nnoremap <F6> :AutoPreviewToggle<CR>
-inoremap <F6> <ESC>:AutoPreviewToggle<CR>i 
+inoremap <F6> <ESC>:AutoPreviewToggle<CR>a 
 
 " --lookupfile--
 "  script to generate filenametags
