@@ -22,14 +22,25 @@ Bundle 'STL-improved'
 
 " Displays tags in a window, ordered by class etc, i used it instead of taglist
 Bundle 'majutsushi/tagbar'
+Bundle 'wesleyche/SrcExpl'
 
 " recommend fetch it from https://github.com/tczengming/autoload_cscope.vim.git which support c and cpp
 Bundle 'tczengming/autoload_cscope.vim'
 
+" CmdlineComplete E.g: you want to search for "elephant" in the buffer, just type /ele and
+" press Ctrl-P. So long as "elephant" is in the buffer, you will get "ele"
+" completed into "elephant". 
 Bundle 'CmdlineComplete'
+
+"Code snippets engine for Vim
 Bundle 'xptemplate'
 
-"  Ultimate auto completion system for Vim
+Bundle 'DoxygenToolkit.vim'
+
+" C/C++ header files should be guarded against multiple inclusions using preprocessor directives
+Bundle 'tczengming/headerGatesAdd.vim'
+
+" Ultimate auto completion system for Vim
 Bundle 'neocomplcache'
 
 "Bundle 'Rip-Rip/clang_complete'
@@ -61,16 +72,17 @@ Bundle 'QFixToggle'
 Bundle 'Color-Sampler-Pack'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'txt.vim'
+
 Bundle 'mru.vim'
 Bundle 'YankRing.vim'
-Bundle 'tpope/vim-surround.git'
-Bundle 'DoxygenToolkit.vim'
-Bundle 'tczengming/headerGatesAdd.vim'
-Bundle 'ShowMarks'
-Bundle 'Lokaltog/vim-powerline'
 
-" Deal with pairs of punctuations such as (), [], {}, and so on
-Bundle 'kana/vim-smartinput'
+Bundle 'tpope/vim-surround.git'
+Bundle 'ShowMarks'
+
+" Display error marks on line which contain errors after compilation 
+Bundle 'cuteErrorMarker'
+
+Bundle 'Lokaltog/vim-powerline'
 
 " non github repos
 " ...
@@ -84,6 +96,7 @@ set t_Co=256                " Explicitly tell vim that the terminal supports 256
 let g:solarized_termcolors=256
 colorscheme solarized
 set background=dark
+hi Normal  ctermfg=252 ctermbg=none     " Transparent background
 
 " Enable syntax highlighting
 syntax on
@@ -121,7 +134,7 @@ set listchars=tab:\|\ ,     " 显示Tab符，使用一高亮竖线代替
 " Indent related
 " http://vimcdoc.sourceforge.net/doc/indent.html
 " g0 类的public顶格写
-" :0 将 case 标号放在 switch() 缩进位置之后的 N 个字符处
+" :0 将 case 标号放在 switch() 缩进位置之后的 0 个字符处
 " N-s namespace 下顶格
 " (0  条件语句多个条件在不同行时下一行与上一行对齐
 set cinoptions=g0,:0,N-s,(0
@@ -159,10 +172,10 @@ let showmarks_ignore_type = "hqm"   " help, Quickfix, non-modifiable
 " NERDTree options
 " Auto change the root directory
 let NERDTreeChDirMode=2
-let g:NERDTreeWinSize = 23
+let g:NERDTreeWinSize = 20
 
 " Tagbar options
-let g:tagbar_width = 30
+let g:tagbar_width = 25
 
 let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
 let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
@@ -195,14 +208,27 @@ noremap! <M-l> <Right>
 
 "/<C-R><C-W> : 把单个<cword>单词放入搜索或者命令行
 
+" allow multiple indentation/deindentation in visual mode
+vnoremap < <gv
+vnoremap > >gv
+
 " open ctags entries in a new tab
 nnoremap <silent><Leader><C-]> <C-w><C-]><C-w>T
 
 set pastetoggle=<F2>
+
+" grep.vim
+let g:Grep_Skip_Dirs = 'RCS CVS SCCS .git .svn'
+let g:Grep_Skip_Files = '*.out *.bak *~ *.swp *.log *tags *.o *.a *.so'
 nnoremap <silent> <F3> :Grep<CR>
 nnoremap <silent> <F4> :Rgrep<CR>
+
+" autopreview
+let g:AutoPreview_enabled = 0
+let g:EchoFuncKeyNext='<C-n>' 
+let g:EchoFuncKeyPrev='<C-p>'
 nnoremap <F6> :AutoPreviewToggle<CR>
-inoremap <F6> <ESC>:AutoPreviewToggle<CR>a 
+inoremap <F6> <ESC>:AutoPreviewToggle<CR>i 
 
 " --lookupfile--
 "  script to generate filenametags
@@ -228,8 +254,6 @@ set tags=tags;
 
 " -- cscope --
 let g:autocscope_menus=0
-" Use quickfix window to show cscope results
-set cscopequickfix=s-,c-,d-,i-,t-,e-
 
 "'csto' 被设为 0，cscope 数据库先 被搜索，搜索失败的情况下在搜索标签文件 
 "设定了 'cscopetag'，这样所有的 :tag 命令就会实际上调用 :cstag。这包括 :tag、Ctrl-] 及 vim -t。
@@ -313,6 +337,7 @@ au BufRead,BufNewFile *.asm,*.c,*.cpp,*.java,*.cs,*.sh,*.lua,*.pl,*.pm,*.py,*.rb
 
 "高亮显示txt 需要txt.vim
 au BufRead,BufNewFile * setfiletype txt
+au BufWritePost       .vimrc              source %
 
 " Restore the last quit position when open file. 
  autocmd BufReadPost * 
@@ -369,3 +394,16 @@ function! ToggleNERDTreeAndTagbar()
 endfunction
 
 nmap <F8> :call ToggleNERDTreeAndTagbar()<CR>
+
+function! DoxygenOneLineCommentTag()
+    exe "normal A\t"
+    let l:wRow = line(".")
+    let l:wCol = col(".")
+    while l:wCol < 36
+        exe "normal A    "
+        let l:wCol = col(".")
+    endwhile
+    exe "normal A/**<  */"
+    exe "normal 2h"
+endfunction
+nmap <leader>c4 <Esc>:call DoxygenOneLineCommentTag()<CR>i
