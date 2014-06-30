@@ -82,7 +82,8 @@ Bundle 'ShowMarks'
 " Display error marks on line which contain errors after compilation 
 Bundle 'cuteErrorMarker'
 
-Bundle 'Lokaltog/vim-powerline'
+"Bundle 'Lokaltog/vim-powerline'
+Bundle 'bling/vim-airline'
 
 " non github repos
 " ...
@@ -111,9 +112,7 @@ set autoread
 set backupdir=~/.vim/backup
 set directory=~/.vim/backup
 
-" vim-powerline
 set laststatus=2            " always have status-line'
-let g:Powerline_symbols = 'fancy'
 "set statusline=%F%m%r%h%w\ %{&ff}\ %Y\ [ascii:%b\ hex:0x\%02.2B]\ [%{(&fenc\ ==\ \"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %=%l/%L,%v\ %p%%
 
 " allow backspacing over everything in insert mode
