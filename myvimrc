@@ -85,6 +85,8 @@ Bundle 'cuteErrorMarker'
 "Bundle 'Lokaltog/vim-powerline'
 Bundle 'bling/vim-airline'
 
+Bundle 'git://github.com/Lokaltog/vim-easymotion.git'
+
 " non github repos
 " ...
 filetype plugin indent on   " required! 
@@ -103,12 +105,11 @@ hi Normal  ctermfg=252 ctermbg=none     " Transparent background
 syntax on
 
 set number
-set autochdir               " 自动切换当前目录为当前文件所在的目录
+set autochdir
 
 " Set to auto read when a file is changed from the outside
 set autoread
 
-" 下面两行改变备份文件存放路径
 set backupdir=~/.vim/backup
 set directory=~/.vim/backup
 
@@ -118,7 +119,7 @@ set laststatus=2            " always have status-line'
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-" 光标到达行尾或者行首时，特定键继续移动转至下一行或上一行
+" Most commands for moving around will stop moving at the start and end of a line. You can change that with the 'whichwrap' option
 set whichwrap+=b,s,<,>,[,]
 
 " Tab related
@@ -128,20 +129,21 @@ set softtabstop=4
 set expandtab               " Use spaces instead of tabs
                         
 set list
-set listchars=tab:\|\ ,     " 显示Tab符，使用一高亮竖线代替
+set listchars=tab:\|\ ,     " display tab as '|'
 
-" Indent related
-" http://vimcdoc.sourceforge.net/doc/indent.html
-" g0 类的public顶格写
-" :0 将 case 标号放在 switch() 缩进位置之后的 0 个字符处
-" N-s namespace 下顶格
-" (0  条件语句多个条件在不同行时下一行与上一行对齐
+" Indent related, see indent.txt
+" gN Place C++ scope declarations N characters from the indent of the
+"    block they are in.  (default 'shiftwidth').  A scope declaration
+"    can be "public:", "protected:" or "private:".
+" :N Place case labels N characters from the indent of the switch()
+" N-s namespace 
+" (N    When in unclosed parentheses, indent N characters from the line with the unclosed parentheses.
 set cinoptions=g0,:0,N-s,(0
 
 set autoindent      " always set autoindenting on
 set smartindent
 
-set mps+=<:>        " 让<>可以使用%跳转
+set mps+=<:>        " also apply matching to < and >
 set hid             " allow to change buffer without saving 
 set shortmess=atI   " shortens messages to avoid 'press a key' prompt 
 set lazyredraw      " do not redraw while executing macros (much faster)
@@ -160,7 +162,7 @@ set incsearch   " do incremental searching
 set hlsearch    " highlight search
 set magic       " Enable magic matching
 set showmatch   " show matching paren
-set wildmenu    " 增强模式中的命令行自动完成操作
+set wildmenu    " enables a menu at the bottom of the vim/gvim window.
 "set mouse=a    " Enable mouse usage (all modes) in terminals
 
 " showmarks setting
@@ -178,7 +180,7 @@ let g:tagbar_width = 25
 
 let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
 let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
-let g:DoxygenToolkit_authorName="zengming@jyxtec.com" 
+let g:DoxygenToolkit_authorName="zengming@jyxtec.com www.jyxtec.com" 
 let g:DoxygenToolkit_versionString="0.1.00"
 let g:DoxygenToolkit_briefTag_funcName="yes"
 autocmd BufNewFile *.{h,hpp,c,cpp} DoxAuthor 
@@ -204,8 +206,6 @@ noremap! <M-j> <Down>
 noremap! <M-k> <Up>
 noremap! <M-h> <left>
 noremap! <M-l> <Right>
-
-"/<C-R><C-W> : 把单个<cword>单词放入搜索或者命令行
 
 " allow multiple indentation/deindentation in visual mode
 vnoremap < <gv
@@ -237,12 +237,12 @@ inoremap <F6> <ESC>:AutoPreviewToggle<CR>i
 "  find `pwd` -not -regex '.*\.\(png\|gif\)' -type f -printf "%f\t%p\t1\n" | \
 "      sort -f >> filenametags 
 "      
-let g:LookupFile_MinPatLength = 2               "最少输入2个字符才开始查找 
-let g:LookupFile_PreserveLastPattern = 0        "不保存上次查找的字符串 
-"let g:LookupFile_PreservePatternHistory = 1     "保存查找历史 
-let g:LookupFile_AlwaysAcceptFirst = 1          "回车打开第一个匹配项目 
-let g:LookupFile_AllowNewFiles = 0              "不允许创建不存在的文件 
-if filereadable("./filenametags")                "设置tag文件的名字
+let g:LookupFile_MinPatLength = 2
+let g:LookupFile_PreserveLastPattern = 0        "Don't save last pattern
+"let g:LookupFile_PreservePatternHistory = 1    "Save history
+let g:LookupFile_AlwaysAcceptFirst = 1          "Enter to open 1st
+let g:LookupFile_AllowNewFiles = 0              "Don't allow create file
+if filereadable("./filenametags")               "Set name
 let g:LookupFile_TagExpr ='"./filenametags"'
 endif
 
@@ -253,10 +253,6 @@ set tags=tags;
 
 " -- cscope --
 let g:autocscope_menus=0
-
-"'csto' 被设为 0，cscope 数据库先 被搜索，搜索失败的情况下在搜索标签文件 
-"设定了 'cscopetag'，这样所有的 :tag 命令就会实际上调用 :cstag。这包括 :tag、Ctrl-] 及 vim -t。
-"结果是一般的 tag 命令不仅搜索由 ctags 产生的标签文 件，同时也搜索 cscope 数据库,但是好像有bug,二者共存时有的无法搜索
 if has("cscope") 
     set csprg=/usr/bin/cscope
     " Use both cscope and ctag
@@ -276,7 +272,7 @@ nmap <C-_>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
 nmap <C-_>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
-" 解决cscope与tag共存时ctrl+]有时不正常的bug
+" fix ctrl+] incorrect when cscope togethoer with tag 
 nmap <C-]> :tj <C-R>=expand("<cword>")<CR><CR>
 
 " Disable AutoComplPop.
@@ -327,16 +323,17 @@ inoremap <expr><C-e>  neocomplcache#cancel_popup()
 "Fast remove highlight search
 nmap <silent> <leader><cr> :noh<cr>
 
-" 每行超过80个的字符用下划线标示
+" Underlined long lines
 au BufRead,BufNewFile *.asm,*.c,*.cpp,*.java,*.cs,*.sh,*.lua,*.pl,*.pm,*.py,*.rb,*.hs,*.vim 2match Underlined /.\%81v/
 
-" 超过80个的字符高亮
+" Highlight long lines
 "au BufWinEnter * let w:m1=matchadd('Search', '\%<88v.\%>81v', -1)
 "au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 
-"高亮显示txt 需要txt.vim
+"highlight .txt, required txt.vim
 au BufRead,BufNewFile * setfiletype txt
-au BufWritePost       .vimrc              source %
+
+"au BufWritePost       .vimrc              source %
 
 " Restore the last quit position when open file. 
  autocmd BufReadPost * 
@@ -344,7 +341,6 @@ au BufWritePost       .vimrc              source %
      \     exe "normal g'\"" | 
      \ endif
 
-" 自动更新最后修改时间
 function! AutoUpdateTheLastUpdateInfo()
     let s:original_pos = getpos(".")
     let s:regexp = "^\\s*\\([#\\\"\\*]\\|\\/\\/\\)\\s\\?[lL]ast \\([uU]pdate\\|[cC]hange\\):"
