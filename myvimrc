@@ -359,7 +359,6 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif   " autoclose preview window when leave insert mode
 nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_confirm_extra_conf=0  " Do not ask when starting vim
 let g:ycm_cache_omnifunc=0 "ensure that the omnicompletion engine is requeried on every keypress
 let g:ycm_seed_identifiers_with_syntax=1
