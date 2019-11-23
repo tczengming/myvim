@@ -63,7 +63,7 @@ Bundle 'The-NERD-Commenter'
 Bundle 'The-NERD-tree'
 
 " Under linux need exec 'dos2unix ~/.vim/bundle/QFixToggle/plugin/qfixtoggle.vim'
-Bundle 'QFixToggle'
+"Bundle 'QFixToggle'
 
 Bundle 'Color-Sampler-Pack'
 Bundle 'altercation/vim-colors-solarized'
@@ -74,6 +74,7 @@ Bundle 'YankRing.vim'
 
 Bundle 'tpope/vim-surround.git'
 Bundle 'ShowMarks'
+Bundle 'pangloss/vim-javascript.git'
 
 " Display error marks on line which contain errors after compilation 
 Bundle 'cuteErrorMarker'
@@ -106,8 +107,8 @@ set autochdir
 " Set to auto read when a file is changed from the outside
 set autoread
 
-set backupdir=~/.vim/backup
-set directory=~/.vim/backup
+"set backupdir=~/.vim/backup
+"set directory=~/.vim/backup
 
 set laststatus=2            " always have status-line'
 "set statusline=%F%m%r%h%w\ %{&ff}\ %Y\ [ascii:%b\ hex:0x\%02.2B]\ [%{(&fenc\ ==\ \"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %=%l/%L,%v\ %p%%
@@ -119,10 +120,16 @@ set backspace=indent,eol,start
 set whichwrap+=b,s,<,>,[,]
 
 " Tab related
-set shiftwidth=4
-set tabstop=4
-set softtabstop=4
-set expandtab               " Use spaces instead of tabs
+" default Python, c/c++, etc.
+set smarttab
+set expandtab | set tabstop=4 | set shiftwidth=4 | set softtabstop=4
+
+" for lua, javascript,etc.
+au FileType html,htmldjango,lua,javascript,nsis
+    \ set expandtab | set tabstop=2 | set shiftwidth=2 | set softtabstop=2
+
+" Makefile 
+au FileType make set noexpandtab | set tabstop=8 | set shiftwidth=8 | set softtabstop=8
                         
 set list
 set listchars=tab:\|\ ,     " display tab as '|'
@@ -134,7 +141,10 @@ set listchars=tab:\|\ ,     " display tab as '|'
 " :N Place case labels N characters from the indent of the switch()
 " N-s namespace 
 " (N    When in unclosed parentheses, indent N characters from the line with the unclosed parentheses.
-set cinoptions=g0,:0,N-s,(0
+"set cinoptions=g0,:0,N-s,(0
+set cinoptions=g0,:0,N-s,(4
+
+au FileType javascript :set cindent shiftwidth=2
 
 set autoindent      " always set autoindenting on
 set smartindent
@@ -176,7 +186,7 @@ let g:tagbar_width = 25
 
 let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
 let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
-let g:DoxygenToolkit_authorName="zengming@jyxtec.com www.jyxtec.com" 
+let g:DoxygenToolkit_authorName="tczengming@163.com" 
 let g:DoxygenToolkit_versionString="0.1.00"
 let g:DoxygenToolkit_briefTag_funcName="yes"
 autocmd BufNewFile *.{h,hpp,c,cpp} DoxAuthor 
@@ -280,6 +290,13 @@ au BufRead,BufNewFile *.asm,*.c,*.cpp,*.java,*.cs,*.sh,*.lua,*.pl,*.pm,*.py,*.rb
 " Highlight long lines
 "au BufWinEnter * let w:m1=matchadd('Search', '\%<88v.\%>81v', -1)
 "au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+"
+"Flagging Unnecessary Whitespace
+"highlight BadWhitespace ctermbg=red guibg=darkred
+"au BufRead,BufNewFile *.c,*.h,*.cpp match BadWhitespace /\s\+$/
+
+"remove whitespace eol
+"au BufWritePost *.c,*.h,*.cpp exec ":%s/\\s\\+$//e"
 
 "highlight .txt, required txt.vim
 au BufRead,BufNewFile * setfiletype txt
@@ -362,7 +379,7 @@ nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let g:ycm_confirm_extra_conf=0  " Do not ask when starting vim
 let g:ycm_cache_omnifunc=0 "ensure that the omnicompletion engine is requeried on every keypress
 let g:ycm_seed_identifiers_with_syntax=1
-let g:ycm_global_ycm_extra_conf = '/home/zengming/Templates/ycm.cpp.py'
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
 let g:syntastic_error_symbol = 'x'
