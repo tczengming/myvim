@@ -24,6 +24,8 @@ Bundle 'STL-improved'
 Bundle 'majutsushi/tagbar'
 Bundle 'wesleyche/SrcExpl'
 
+"Bundle 'jsfaint/gen_tags.vim'
+
 " recommend fetch it from https://github.com/tczengming/autoload_cscope.vim.git which support c and cpp
 Bundle 'tczengming/autoload_cscope.vim'
 
@@ -43,7 +45,7 @@ Bundle 'DoxygenToolkit.vim'
 Bundle 'tczengming/headerGatesAdd.vim'
 
 Bundle 'genutils'
-Bundle 'lookupfile'
+"Bundle 'lookupfile'
 
 " Fuzzy file, buffer, mru, tag, ... finder with regexp support.
 Bundle 'kien/ctrlp.vim'
@@ -58,6 +60,7 @@ Bundle 'autopreview'
 Bundle 'echofunc.vim'
 
 Bundle 'grep.vim'
+Bundle 'mileszs/ack.vim'
 Bundle 'a.vim'
 Bundle 'The-NERD-Commenter'
 Bundle 'The-NERD-tree'
@@ -125,7 +128,7 @@ set smarttab
 set expandtab | set tabstop=4 | set shiftwidth=4 | set softtabstop=4
 
 " for lua, javascript,etc.
-au FileType html,htmldjango,lua,javascript,nsis
+au FileType html,htmldjango,lua,javascript,nsis,scss
     \ set expandtab | set tabstop=2 | set shiftwidth=2 | set softtabstop=2
 
 " Makefile 
@@ -142,8 +145,7 @@ set listchars=tab:\|\ ,     " display tab as '|'
 " N-s namespace 
 " (N    When in unclosed parentheses, indent N characters from the line with the unclosed parentheses.
 "set cinoptions=g0,:0,N-s,(0
-set cinoptions=g0,:0,N-s,(4
-
+set cinoptions=g0,:4,N-s,(4
 au FileType javascript :set cindent shiftwidth=2
 
 set autoindent      " always set autoindenting on
@@ -186,7 +188,7 @@ let g:tagbar_width = 25
 
 let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
 let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
-let g:DoxygenToolkit_authorName="tczengming@163.com" 
+let g:DoxygenToolkit_authorName="xx@xx.com" 
 let g:DoxygenToolkit_versionString="0.1.00"
 let g:DoxygenToolkit_briefTag_funcName="yes"
 autocmd BufNewFile *.{h,hpp,c,cpp} DoxAuthor 
@@ -235,40 +237,20 @@ let g:EchoFuncKeyPrev='<C-p>'
 nnoremap <F6> :AutoPreviewToggle<CR>
 inoremap <F6> <ESC>:AutoPreviewToggle<CR>i 
 
-" --lookupfile--
-"  script to generate filenametags
-"  #!/bin/sh
-"  # generate tag file for lookupfile plugin, use absolute path
-"  echo -e "!_TAG_FILE_SORTED\t2\t/2=foldcase/" > filenametags
-"  find `pwd` -not -regex '.*\.\(png\|gif\)' -type f -printf "%f\t%p\t1\n" | \
-"      sort -f >> filenametags 
-"      
-let g:LookupFile_MinPatLength = 2
-let g:LookupFile_PreserveLastPattern = 0        "Don't save last pattern
-"let g:LookupFile_PreservePatternHistory = 1    "Save history
-let g:LookupFile_AlwaysAcceptFirst = 1          "Enter to open 1st
-let g:LookupFile_AllowNewFiles = 0              "Don't allow create file
-if filereadable("./filenametags")               "Set name
-let g:LookupFile_TagExpr ='"./filenametags"'
-endif
-
 "ctrlp
 let g:ctrlp_user_command = 'find %s -type f'
 
 set tags=tags;
 
-" -- cscope --
-let g:autocscope_menus=0
-if has("cscope") 
-    set csprg=/usr/bin/cscope
-    " Use both cscope and ctag
-    set cscopetag
-    " Show msg when cscope db added
-    set cscopeverbose
-    " Use cscope for definition search first
-    set cscopetagorder=0
-endif
 
+"0 or s: Find this C symbol
+"1 or g: Find this definition
+"2 or d: Find functions called by this function
+"3 or c: Find functions calling this function
+"4 or t: Find this text string
+"6 or e: Find this egrep pattern
+"7 or f: Find this file
+"8 or i: Find files #including this file
 nmap <C-_>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 nmap <C-_>g :cs find g <C-R>=expand("<cword>")<CR><CR>
 nmap <C-_>c :cs find c <C-R>=expand("<cword>")<CR><CR>
@@ -388,6 +370,9 @@ let g:syntastic_warning_symbol = '⚠'
 " make YCM compatible with xtemplate
 let g:ycm_key_list_select_completion = ['<c-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<c-p>', '<Up>']
+
+" xtemplate
+let g:xptemplate_vars = "SParg=&BRfun= "
 
 " whether to show balloons  press <leader>l to toogle
 let g:syntastic_enable_balloons = 1
